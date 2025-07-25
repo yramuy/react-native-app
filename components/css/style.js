@@ -169,4 +169,43 @@ export default StyleSheet.create({
         flexDirection: 'row',
     },
 
+    // Add Saint CSS
+    formCard: {
+        padding: 10,
+        margin: 10
+    },
+    textLbl: {
+        fontSize: 14,
+        fontWeight: '400',
+        marginLeft: 5
+    },
+    textInput: {
+        width: 'auto',
+        backgroundColor: 'white',
+        elevation: 1,
+        marginTop: 8,
+        borderRadius: 10,
+        paddingLeft: 10,
+        marginBottom: 10
+    },
+    radioGroup: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginBottom: 10
+    },
+    radioButton: {
+        width: 20,
+        height: 20,
+        borderRadius: 50,
+        borderColor: 'grey',
+        borderWidth: 1,
+        marginTop: 10,
+        marginLeft: 8
+    },
+    radioLbl: {
+        marginTop: 10,
+        marginLeft: 15,
+        fontSize: 14
+    }
+
 });
