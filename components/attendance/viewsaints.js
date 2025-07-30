@@ -221,8 +221,6 @@ const ViewSaints = () => {
                 />
             </View>
 
-
-
             {
                 card === true ? <View style={styles.categoryCard}>
                     <View style={styles.categoryRow}>

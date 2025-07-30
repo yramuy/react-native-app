@@ -171,16 +171,25 @@ export default StyleSheet.create({
 
     // Add Saint CSS
     formCard: {
-        padding: 10,
-        margin: 10
+        padding: 8,
+        margin: 5
     },
     textLbl: {
         fontSize: 14,
         fontWeight: '400',
         marginLeft: 5
     },
+
+    dobLbl: {
+        fontSize: 14,
+        fontWeight: '400',
+        marginLeft: 5,
+        marginTop: 10
+    },
+
     textInput: {
         width: 'auto',
+        height: 50,
         backgroundColor: 'white',
         elevation: 1,
         marginTop: 8,
@@ -193,19 +202,90 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         marginBottom: 10
     },
-    radioButton: {
+    maleButton: {
         width: 20,
         height: 20,
         borderRadius: 50,
-        borderColor: 'grey',
         borderWidth: 1,
         marginTop: 10,
-        marginLeft: 8
+        marginLeft: 8,
+    },
+    femaleButton: {
+        width: 20,
+        height: 20,
+        borderRadius: 50,
+        borderWidth: 1,
+        marginTop: 10,
+        marginLeft: 8,
     },
     radioLbl: {
         marginTop: 10,
         marginLeft: 15,
         fontSize: 14
+    },
+    selectedButton: {
+        backgroundColor: 'green', // Color when selected
+    },
+    dateContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 'auto',
+        height: 50,
+        backgroundColor: 'white',
+        elevation: 1,
+        borderRadius: 10,
+        marginTop: 10,
+
+    },
+    dateText: {
+        paddingLeft: 10,
+        marginTop: 15
+    },
+    dateIcon: {
+        paddingRight: 20,
+        marginTop: 10,
+        fontSize: 25,
+        color: 'green'
+    },
+    districtDropdown: {
+        borderColor: '#ccc',
+        borderWidth: 0,
+        borderRadius: 6,
+        minHeight: 50,
+        elevation: 1,
+        marginTop: 10,
+    },
+    bottomBar: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: '10%',
+        marginTop: 20
+    },
+    saveBtn: {
+        width: '30%',
+        backgroundColor: 'purple',
+        paddingVertical: 6,
+        borderRadius: 8,
+    },
+    backBtn: {
+        width: '30%',
+        backgroundColor: 'grey',
+        paddingVertical: 6,
+        borderRadius: 8,
+    },
+    saveBtnText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingVertical: 8
+
+    },
+    backBtnText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingVertical: 8
+
     }
 
 });
