@@ -257,9 +257,7 @@ export default StyleSheet.create({
     },
     bottomBar: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        gap: '10%',
-        marginTop: 20
+        justifyContent: 'space-evenly',
     },
     saveBtn: {
         width: '30%',
@@ -286,6 +284,20 @@ export default StyleSheet.create({
         textAlign: 'center',
         paddingVertical: 8
 
-    }
+    },
+    star: {
+        color: 'red',
+        fontSize: 18
+    },
+    toast: {
+        backgroundColor: 'black'
+    },
+    bottomBarContainer: {
+        // eslint-disable-next-line no-undef
+        paddingBottom: Platform.OS === 'android' ? 10 : 30,
+        backgroundColor: '#fff',
+        paddingHorizontal: 10,
+        paddingTop: 10,
+    },
 
 });
