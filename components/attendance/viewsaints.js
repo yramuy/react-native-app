@@ -6,6 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useEffect, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from 'axios';
+import { useNavigation } from "@react-navigation/native";
 
 const ViewSaints = () => {
 
@@ -30,6 +31,7 @@ const ViewSaints = () => {
     const [catTotal, setCatTotal] = useState('0');
 
     const [categoryName, setCategoryName] = useState('');
+    const navigation = useNavigation();
 
 
 
@@ -194,6 +196,28 @@ const ViewSaints = () => {
         );
     };
 
+    const handleDelete = async (id) => {
+        const body = JSON.stringify({
+            id: id
+        });
+        const response = await fetch('https://civsp.in/statisticsApp/api/deleteSaint', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: body
+        });
+
+        const responseBody = await response.json();
+
+        if (response.status === 200) {
+            Alert.alert(responseBody['message']);
+            loadSaints();
+        } else {
+            Alert.alert(responseBody['message']);
+        }
+    }
+
     return (
         <View style={styles.container}>
             {/* Dropdowns container */}
@@ -242,8 +266,8 @@ const ViewSaints = () => {
 
                 </View> :
                     <View style={styles.cardRow}>
-                            <Text style={styles.catHeaderTextBold}>{categoryName} Total </Text>
-                            <Text style={styles.cellText}>{catTotal}</Text>
+                        <Text style={styles.catHeaderTextBold}>{categoryName} Total </Text>
+                        <Text style={styles.cellText}>{catTotal}</Text>
 
                     </View>
             }
@@ -279,10 +303,10 @@ const ViewSaints = () => {
                             </Text>
                         </View>
                         <View style={styles.actionButtons}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate("addSaint", { saint: item })}>
                                 <Icon name="edit" style={styles.editIcon} />
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleDelete(item.id)}>
                                 <AntDesign name="delete" style={styles.deleteIcon} />
                             </TouchableOpacity>
                         </View>

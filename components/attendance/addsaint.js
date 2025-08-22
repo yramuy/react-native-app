@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 
 /* eslint-disable no-undef */
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Button, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Button, KeyboardAvoidingView, Alert } from 'react-native';
 import styles from '../css/style';
 import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,12 +9,12 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from 'react-native-toast-message';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const AddSaint = () => {
-
-    const insets = useSafeAreaInsets();
 
 
     const [selectedGender, setSelectedGender] = useState(null);
@@ -37,14 +37,65 @@ const AddSaint = () => {
     const [openCf, setOpenCf] = useState(false);
     const [classificationID, setClassificationID] = useState('0');
 
+    const [userID, setUserID] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const [formData, setFormData] = useState({
-        saintName: '',
-        mobileNumber: ''
+        id: '0',
+        name: '',
+        email: '',
+        mobile: '',
+        username: '',
+        password: '',
+        gender: '',
+        dob: '',
+        age: '',
+        saintStatus: '1',
+
     });
+
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { saint } = route.params || {};
 
     useEffect(() => {
         loadDropdowns();
+        loadLoginData();
     }, []);
+
+    useEffect(() => {
+        if (saint) {
+            setFormData({
+                id: saint.id,
+                name: saint.name || '',
+                email: saint.email || '',
+                mobile: saint.mobile || '',
+                username: saint.user_name || '',
+                password: '',
+                gender: '',
+                dob: '',
+                age: '',
+                saintStatus: '1',
+            });
+
+            setSelectedGender(saint.gender === 'Male' || saint.gender === "1" ? 1 : 2);
+            const dateStr = saint.dob; // yyyy-mm-dd
+            const dateObj = new Date(dateStr);
+            formatDate(dateObj);
+
+            setDistrictID(saint.districtId?.toString() || '0');
+            setCategoryID(saint.saintTypeId?.toString() || '0');
+            setClassificationID(saint.classification?.toString() || '0');
+            setRoleID(saint.user_role_id?.toString() || '4');
+        }
+    }, [saint]);
+
+    const loadLoginData = async () => {
+        var createdBy = await AsyncStorage.getItem('userId');
+        setUserID(createdBy);
+
+        console.log("Saint", saint);
+    }
 
     const loadDropdowns = async () => {
         try {
@@ -115,38 +166,84 @@ const AddSaint = () => {
         setFormData(prev => ({ ...prev, [key]: value }));
     };
 
-    const handleSave = () => {
-        if (!formData.saintName.trim()) {
+    const handleSave = async () => {
+
+        if (!formData.name) {
             Toast.show({
                 type: 'customError',
                 text1: 'Saint Name is required'
             });
             return;
-        } else if (!formData.mobileNumber.trim()) {
+        } else if (!formData.mobile) {
             Toast.show({
                 type: 'customError',
                 text1: 'Mobile number is required'
             })
             return;
-        } else if (formData.mobileNumber.length !== 10) {
+        } else if (formData.mobile.length !== 10) {
             Toast.show({
                 type: 'customError',
                 text1: 'Please enter valid mobile number'
             })
             return;
+        } else if (districtID === '0') {
+            Toast.show({
+                type: 'customError',
+                text1: 'District is required'
+            });
+            return;
+
+        } else if (categoryID === '0') {
+            Toast.show({
+                type: 'customError',
+                text1: 'Category is required'
+            });
+            return;
+
+        } else if (classificationID === '0') {
+            Toast.show({
+                type: 'customError',
+                text1: 'Classification is required'
+            });
+            return;
+
         } else {
 
+            setIsLoading(true);
             const saintFormData = {
                 ...formData,
-                roleID: roleID,
-                districtID: districtID,
-                categoryID: categoryID,
-                classificationID: classificationID,
-                gender: selectedGender,
-                dob: formatDate(date)
+                created_by: userID,
+                userId: userID,
+                user_role_id: roleID,
+                district: districtID,
+                saintType: categoryID,
+                classification: classificationID
             };
 
-            console.log("Saint FormData : ", saintFormData);
+            console.log("saintFormData : ", saintFormData);
+
+            const response = await fetch('https://civsp.in/statisticsApp/api/saveOrUpdateSaint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify(saintFormData)
+            });
+
+            const responseBody = await response.json();
+
+            if (response.status === 200) {
+
+                console.log("responseBody : ", responseBody);
+                navigation.replace('viewsaints');
+                Alert.alert(responseBody['message']);
+                setIsLoading(false);
+            } else {
+                Alert.alert(responseBody['message']);
+                setIsLoading(false);
+            }
+
         }
 
     };
@@ -156,7 +253,7 @@ const AddSaint = () => {
         customError: ({ text1 }) => {
             return (
                 <View style={{
-                    width: '90%',
+                    width: '97%',
                     height: 60,
                     backgroundColor: 'black',
                     borderRadius: 10,
@@ -183,25 +280,32 @@ const AddSaint = () => {
                             <View style={styles.formCard}>
                                 <Text style={styles.textLbl}>Saint Name <Text style={styles.star}>*</Text></Text>
                                 <TextInput style={styles.textInput}
-                                    value={formData.saintName}
-                                    onChangeText={(text) => updateField('saintName', text)}
+                                    value={formData.name}
+                                    onChangeText={(text) => updateField('name', text)}
                                 />
 
                                 <Text style={styles.textLbl}>Email</Text>
-                                <TextInput style={styles.textInput} />
+                                <TextInput style={styles.textInput}
+                                    value={formData.email}
+                                    onChangeText={(text) => updateField('email', text)} />
 
                                 <Text style={styles.textLbl}>Mobile Number <Text style={styles.star}>*</Text></Text>
                                 <TextInput style={styles.textInput}
                                     keyboardType='number-pad'
-                                    value={formData.mobileNumber}
-                                    onChangeText={(text) => updateField('mobileNumber', text)}
+                                    value={formData.mobile}
+                                    onChangeText={(text) => updateField('mobile', text)}
                                 />
 
                                 <Text style={styles.textLbl}>User Name</Text>
-                                <TextInput style={styles.textInput} />
+                                <TextInput style={styles.textInput}
+                                    value={formData.username}
+                                    onChangeText={(text) => updateField('username', text)}
+                                />
 
                                 <Text style={styles.textLbl}>Password</Text>
-                                <TextInput style={styles.textInput} />
+                                <TextInput style={styles.textInput} value={formData.password}
+                                    onChangeText={(text) => updateField('password', text)}
+                                />
 
                                 <Text style={styles.textLbl}>Gender</Text>
                                 <View style={styles.radioGroup}>
