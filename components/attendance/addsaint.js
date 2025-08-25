@@ -408,7 +408,7 @@ const AddSaint = () => {
                     {/* Bottom Bar fixed at bottom */}
                     <View style={[styles.bottomBar, { paddingBottom: 10 }]}>
                         <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
-                            <Text style={styles.saveBtnText}>Save</Text>
+                            <Text style={styles.saveBtnText}>{formData.id != "0" ? 'Update' : 'Save'}</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.backBtn}>

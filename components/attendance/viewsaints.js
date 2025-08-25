@@ -196,7 +196,31 @@ const ViewSaints = () => {
         );
     };
 
+    const showConfirmDialog = (id) => {
+        return Alert.alert(
+            "Confirm",
+            "Are you sure you want to delete?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => {
+
+                    },
+                    style: 'cancel'
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        handleDelete(id);
+                    },
+
+                }
+            ]
+        );
+    }
+
     const handleDelete = async (id) => {
+        showConfirmDialog(id);
         const body = JSON.stringify({
             id: id
         });
@@ -306,7 +330,7 @@ const ViewSaints = () => {
                             <TouchableOpacity onPress={() => navigation.navigate("addSaint", { saint: item })}>
                                 <Icon name="edit" style={styles.editIcon} />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                            <TouchableOpacity onPress={() => showConfirmDialog(item.id)}>
                                 <AntDesign name="delete" style={styles.deleteIcon} />
                             </TouchableOpacity>
                         </View>
