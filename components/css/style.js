@@ -13,7 +13,7 @@ export default StyleSheet.create({
     boxDecoration: {
         width: wp('90%'),
         padding: 30,
-        margin: 20,
+        margin: 16,
         backgroundColor: 'white',
         borderRadius: 10,
         elevation: 5,

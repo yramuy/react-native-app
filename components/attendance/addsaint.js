@@ -171,7 +171,7 @@ const AddSaint = () => {
         if (!formData.name) {
             Toast.show({
                 type: 'customError',
-                text1: 'Saint Name is required'
+                text1: 'Saint Name is required',
             });
             return;
         } else if (!formData.mobile) {
@@ -250,17 +250,22 @@ const AddSaint = () => {
 
     const toastConfig = {
         // eslint-disable-next-line react/no-unstable-nested-components
-        customError: ({ text1 }) => {
+        customError: ({ text1, onHide }) => {
             return (
                 <View style={{
                     width: '97%',
-                    height: 60,
+                    minHeight: 60,
                     backgroundColor: 'black',
                     borderRadius: 10,
                     paddingHorizontal: 10,
-                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                 }}>
                     <Text style={{ color: '#fff', fontSize: 16 }}>{text1}</Text>
+                    <TouchableOpacity onPress= { () => Toast.hide()}>
+                        <Text style={{ color: '#fff', fontSize: 15, marginRight: 15, marginBottom: 12}}>Ok</Text>
+                    </TouchableOpacity>
                 </View>
             );
         }
@@ -291,7 +296,9 @@ const AddSaint = () => {
 
                                 <Text style={styles.textLbl}>Mobile Number <Text style={styles.star}>*</Text></Text>
                                 <TextInput style={styles.textInput}
-                                    keyboardType='number-pad'
+                                    keyboardType='numeric'
+                                    maxLength={13}
+                                    
                                     value={formData.mobile}
                                     onChangeText={(text) => updateField('mobile', text)}
                                 />
@@ -419,7 +426,7 @@ const AddSaint = () => {
                     </View>
 
                 </View>
-                <Toast config={toastConfig} />
+                <Toast position='bottom' bottomOffset={70} config={toastConfig} />
             </KeyboardAvoidingView>
         </SafeAreaView>
 

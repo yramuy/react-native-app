@@ -69,6 +69,10 @@ const Index = () => {
                 navigation.navigate('viewsaints', { title: name });
                 break;
 
+            case '41':
+                navigation.navigate('addSaint', { title: name });
+                break;
+
             default:
                 break;
         }

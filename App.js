@@ -10,6 +10,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AddSaint from './components/attendance/addsaint';
 import LandingPage from './components/landingpage';
 import Login from './components/login';
+import MyTabs from './components/mytabs';
+import Dashboard from './components/dashboard';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +60,7 @@ function App() {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}
+                onPress={() => navigation.reset({ index: 0, routes: [{ name: 'mytabs' }] })}
 
               >
                 <FontAwesome5 name="home" size={30} color='white' />
@@ -70,7 +72,8 @@ function App() {
           headerTintColor: 'white',
         })} />
         <Stack.Screen name='addSaint' component={AddSaint} options={{ title: 'Add Saint', headerTitleAlign: 'center', headerTintColor: 'white' }} />
-
+        <Stack.Screen name='mytabs' component={MyTabs} options={{ title: 'Welcome to CIV', headerTitleAlign: 'center', headerTintColor: 'white' }} />
+        <Stack.Screen name='dashboard' component={Dashboard} options={{ title: 'Dashboard', headerTitleAlign: 'center', headerTintColor: 'white' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

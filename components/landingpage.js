@@ -32,7 +32,7 @@ const LandingPage = () => {
         const loggedIn = await getLoginState();
         console.log("IsLoggin", loggedIn);
         if (loggedIn === 'true') {
-          navigation.replace('Home');
+          navigation.replace('mytabs');
         } else {
           navigation.replace('login');
         }
