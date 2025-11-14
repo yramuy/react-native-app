@@ -12,6 +12,7 @@ import LandingPage from './components/landingpage';
 import Login from './components/login';
 import MyTabs from './components/mytabs';
 import Dashboard from './components/dashboard';
+import UpdateAttendance from './components/attendance/updateattendance';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,8 @@ function App() {
         <Stack.Screen name='addSaint' component={AddSaint} options={{ title: 'Add Saint', headerTitleAlign: 'center', headerTintColor: 'white' }} />
         <Stack.Screen name='mytabs' component={MyTabs} options={{ title: 'Welcome to CIV', headerTitleAlign: 'center', headerTintColor: 'white' }} />
         <Stack.Screen name='dashboard' component={Dashboard} options={{ title: 'Dashboard', headerTitleAlign: 'center', headerTintColor: 'white' }} />
+        <Stack.Screen name='updateAttendance' component={UpdateAttendance} options={{ title: 'Update Attendance', headerTitleAlign: 'center', headerTintColor: 'white' }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

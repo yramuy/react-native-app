@@ -73,6 +73,10 @@ const Index = () => {
                 navigation.navigate('addSaint', { title: name });
                 break;
 
+            case '44':
+                navigation.navigate('updateAttendance', { title: name });
+                break;
+
             default:
                 break;
         }
