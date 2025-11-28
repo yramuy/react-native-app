@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 
 const UpdateAttendance = () => {
 
     const [saints, setSaints] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [isAttendance, setIsAttendance] = useState({});
 
     useEffect(() => {
         loadSaints();
     }, []);
 
     const loadSaints = async () => {
+        setLoading(true);
         const body = JSON.stringify({
             "districtId": "",
             "typeId": "",
@@ -29,7 +33,17 @@ const UpdateAttendance = () => {
         if (response.status === 200) {
             const responseBody = await response.json();
             setSaints(responseBody.saints);
+            setLoading(false);
+        } else {
+            setLoading(false);
         }
+    };
+
+    const handleAttendance = (item, index, value) => {
+        setIsAttendance(prev => ({
+            ...prev,
+            [index]: value
+        }));
     };
 
     const renderItem = ({ item, index }) => (
@@ -37,38 +51,66 @@ const UpdateAttendance = () => {
             <Text style={styles.cell}>{index + 1}. {item.name}</Text>
 
             <View style={styles.dataRow}>
-                <View style={{ alignItems: "center" }}>
-                    <Text>Present</Text>
-                    <TouchableOpacity style={styles.radioButton} />
-                </View>
 
-                <View style={{ alignItems: "center" }}>
-                    <Text>Absent</Text>
-                    <TouchableOpacity style={styles.radioButton} />
-                </View>
+                {/* PRESENT */}
+                <TouchableOpacity
+                    style={styles.statusBox}
+                    onPress={() => handleAttendance(item, index, true)}
+                >
+                    <Text style={styles.label}>Present</Text>
+                    <View
+                        style={[
+                            styles.radioButton,
+                            { backgroundColor: isAttendance[index] === true ? "green" : "#fff" }
+                        ]}
+                    />
+                </TouchableOpacity>
+
+                {/* ABSENT */}
+                <TouchableOpacity
+                    style={styles.statusBox}
+                    onPress={() => handleAttendance(item, index, false)}
+                >
+                    <Text style={styles.label}>Absent</Text>
+                    <View
+                        style={[
+                            styles.radioButton,
+                            { backgroundColor: isAttendance[index] === false ? "red" : "#fff" }
+                        ]}
+                    />
+                </TouchableOpacity>
+
             </View>
         </View>
     );
 
     return (
-        <View style={styles.container}>
+        <View>
+            {
+                loading ? (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="large" color="#4CAF50" style={styles.indicator} />
+                    </View>
+                ) : (
+                    <>
+                        <View style={[styles.row, styles.header]}>
+                            <Text style={styles.headerText}>Name</Text>
+                            <Text style={styles.headerText}>Attendance</Text>
+                        </View>
 
-            {/* Header */}
-            <View style={[styles.row, styles.header]}>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={styles.headerText}>Attendance</Text>
-            </View>
-
-            {/* List */}
-            <FlatList
-                data={saints}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={{ paddingBottom: 20 }}
-            />
-
+                        <FlatList
+                            data={saints}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.id.toString()}
+                            contentContainerStyle={{ paddingBottom: 20 }}
+                        />
+                    </>
+                )
+            }
         </View>
     );
+
+
 };
 
 const styles = StyleSheet.create({
@@ -93,7 +135,8 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         paddingLeft: 10,
-        marginLeft: 20
+        marginLeft: 20,
+        fontSize: 16
     },
     cell: {
         flex: 1,
@@ -106,13 +149,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-evenly',
     },
+    statusBox: {
+        alignItems: "center",
+        justifyContent: "center",
+    },
     radioButton: {
         height: 20,
         width: 20,
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: 0.3,
         borderColor: 'black',
         marginTop: 5,
+    },
+    loadingContainer: {
+        // flex: 1,
+        // justifyContent: "center",
+        // alignItems: "center",
+        paddingVertical: 300,
     }
 });
 
