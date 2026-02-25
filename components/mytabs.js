@@ -41,9 +41,10 @@ function MyTabs() {
                 },
             })}
         >
+            <Tab.Screen name="Dashboard" component={Dashboard} />
 
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Dashboard" component={Dashboard} />
+            <Tab.Screen name="Home" component={HomeScreen} />
+
 
         </Tab.Navigator>
     );

@@ -48,7 +48,7 @@ const Login = () => {
                 console.log("Response Body");
                 console.log(responseBody.data);
                 saveUserDatails(responseBody.data);
-                navigation.replace('Home');
+                navigation.replace('mytabs');
                 Alert.alert('Login Successful!', `Username: ${username}`);
             } else {
                 Alert.alert('Login failed!', 'Incorrect username or password!');
